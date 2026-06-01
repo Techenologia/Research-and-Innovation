@@ -1,0 +1,33 @@
+name: R&I — Statut des Projets
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 8 * * *'  # Tous les jours à 8h
+  workflow_dispatch:       # Déclenchement manuel
+
+jobs:
+  check-projects:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout R&I
+        uses: actions/checkout@v4
+
+      - name: Statut tt-maintenance
+        run: |
+          echo "=== Statut des Projets T&T ==="
+          echo "✅ Research-and-Innovation : OK"
+          
+      - name: Checkout tt-maintenance
+        uses: actions/checkout@v4
+        with:
+          repository: Techenologia/tt-maintenance
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: tt-maintenance
+
+      - name: Afficher infos tt-maintenance
+        run: |
+          cd tt-maintenance
+          echo "✅ tt-maintenance — dernier commit :"
+          git log --oneline -1
